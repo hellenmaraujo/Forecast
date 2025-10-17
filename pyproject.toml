@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=65", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tcc-sop-modular"
+version = "0.1.0"
+description = "Modular S&OP pipeline with forecasting and optimisation."
+requires-python = ">=3.9"
+dependencies = []
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.coverage.run]
+source = ["src"]

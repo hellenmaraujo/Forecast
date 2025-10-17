@@ -1,0 +1,78 @@
+project:
+  seed: 42
+  paths:
+    data_raw: "data/raw"
+    data_interim: "data/interim"
+    data_processed: "data/processed"
+    models_dir: "models"
+    reports_tables: "reports/tables"
+    reports_figures: "reports/figures"
+    logging_config: "configs/logging.yaml"
+
+data_prep:
+  date_column: "data"
+  family_column: "familia"
+  product_column: "produto"
+  target_column: "quantidade"
+  frequency: "M"        # M (mensal)
+  test_size_months: 6
+  synthetic:
+    enabled: true
+    start: "2020-01-01"
+    periods: 36
+    familias: ["A", "B"]
+    produtos_por_familia: 3
+    sazonalidade_amplitude: 0.2
+    tendencia: 0.01
+    ruido: 0.05
+  lags: [1, 2, 3, 6, 12]
+  rolling_windows: [3, 6]
+
+forecast:
+  horizon_months: 6
+  folds: 3
+  models:
+    random_forest:
+      enabled: true
+      n_estimators: [200]
+      max_depth: [6, 10]
+      min_samples_leaf: [2, 5]
+    xgboost:
+      enabled: true
+      n_estimators: [300]
+      max_depth: [4, 6]
+      learning_rate: [0.05]
+      subsample: [0.8]
+      colsample_bytree: [0.8]
+    arima:
+      enabled: false
+    svr:
+      enabled: false
+    mlp:
+      enabled: false
+
+optimization:
+  initial_inventory: { "A": 0, "B": 0 }
+  cost_parameters:
+    default:
+      production: 1.0
+      inventory: 0.2
+      backlog: 3.0
+  capacity_per_period:  # por mês (YYYY-MM) ou "default"
+    default: 10000
+
+rrp:
+  productivity_units_per_hour: { "A": 50, "B": 40 }
+  capacity_hours_per_period:
+    default: 250
+
+disaggregation:
+  proportions:
+    A:
+      "A_prod_1": 0.5
+      "A_prod_2": 0.3
+      "A_prod_3": 0.2
+    B:
+      "B_prod_1": 0.4
+      "B_prod_2": 0.35
+      "B_prod_3": 0.25
