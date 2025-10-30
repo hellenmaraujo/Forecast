@@ -39,7 +39,7 @@ def build_features(cfg: Dict[str, Any]) -> Tuple[pd.DataFrame, pd.DataFrame, Dic
     train = _add_lags_rollings(train, cfg, group_cols, c["target_column"])
     test = _add_lags_rollings(test, cfg, group_cols, c["target_column"])
     min_lag = max([0] + c["lags"] + c["rolling_windows"])
-    train = train.groupby(group_cols).apply(lambda d: d.iloc[min_lag:]).reset_index(drop=True)
+    train = (train.groupby(group_cols, group_keys=False).apply(lambda d: d.iloc[min_lag:]).reset_index(drop=True))
     feature_cols = [col for col in train.columns if col not in [c["target_column"], c["date_column"]] + group_cols]
     train.dropna(subset=feature_cols, inplace=True)
     test.dropna(subset=feature_cols, inplace=True)

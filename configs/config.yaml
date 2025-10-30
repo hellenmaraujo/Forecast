@@ -14,17 +14,10 @@ data_prep:
   family_column: "familia"
   product_column: "produto"
   target_column: "quantidade"
-  frequency: "M"        # M (mensal)
+  frequency: "M"        # mensal (fim do mês)
   test_size_months: 6
   synthetic:
-    enabled: true
-    start: "2020-01-01"
-    periods: 36
-    familias: ["A", "B"]
-    produtos_por_familia: 3
-    sazonalidade_amplitude: 0.2
-    tendencia: 0.01
-    ruido: 0.05
+    enabled: false
   lags: [1, 2, 3, 6, 12]
   rolling_windows: [3, 6]
 
@@ -32,6 +25,26 @@ forecast:
   horizon_months: 6
   folds: 3
   models:
+    moving_average:
+      enabled: true
+      window: [3]             # você pode testar [3, 6]
+    ses:
+      enabled: true
+      alpha: [0.3]            # ou deixe vazio e otimize no código
+      optimized: [false]
+    holt:
+      enabled: true
+      alpha: [0.3]
+      beta: [0.1]
+      optimized: [false]
+    arima:
+      enabled: true
+      auto: true              # se o código aceitar auto-ARIMA
+    svr:
+      enabled: true
+      kernel: ["rbf"]
+      C: [1.0, 10.0]
+      gamma: ["scale"]
     random_forest:
       enabled: true
       n_estimators: [200]
@@ -44,14 +57,9 @@ forecast:
       learning_rate: [0.05]
       subsample: [0.8]
       colsample_bytree: [0.8]
-    arima:
-      enabled: false
-    svr:
-      enabled: false
-    mlp:
-      enabled: false
 
-optimization:
+
+# optimization:
   initial_inventory: { "A": 0, "B": 0 }
   cost_parameters:
     default:
@@ -61,12 +69,12 @@ optimization:
   capacity_per_period:  # por mês (YYYY-MM) ou "default"
     default: 10000
 
-rrp:
+# rrp:
   productivity_units_per_hour: { "A": 50, "B": 40 }
   capacity_hours_per_period:
     default: 250
 
-disaggregation:
+# disaggregation:
   proportions:
     A:
       "A_prod_1": 0.5
@@ -76,3 +84,4 @@ disaggregation:
       "B_prod_1": 0.4
       "B_prod_2": 0.35
       "B_prod_3": 0.25
+
