@@ -38,8 +38,7 @@ forecast:
       beta: [0.1]
       optimized: [false]
     arima:
-      enabled: true
-      auto: true              # se o código aceitar auto-ARIMA
+      enabled: false
     svr:
       enabled: true
       kernel: ["rbf"]
@@ -57,7 +56,6 @@ forecast:
       learning_rate: [0.05]
       subsample: [0.8]
       colsample_bytree: [0.8]
-
 
 # optimization:
   initial_inventory: { "A": 0, "B": 0 }
@@ -84,4 +82,3 @@ forecast:
       "B_prod_1": 0.4
       "B_prod_2": 0.35
       "B_prod_3": 0.25
-
